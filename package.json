@@ -19,5 +19,8 @@
   "homepage": "https://github.com/Pramod94/Node_Js_Complete_Guide#readme",
   "devDependencies": {
     "nodemon": "^2.0.18"
+  },
+  "dependencies": {
+    "express": "^4.18.1"
   }
 }
