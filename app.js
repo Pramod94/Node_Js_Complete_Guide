@@ -1,7 +1,9 @@
 const express = require("express");
+const path = require("path");
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
+const rootDir = require("./utils/path");
 
 // This module is required to parse the incoming data
 const bodyParser = require("body-parser");
@@ -21,7 +23,7 @@ app.use(shopRoutes);
 // Since it will look for the default route '/'
 // So this can be used to handle error response for invalid route requests
 app.use((req, res, next) => {
-  res.status(404).send("<h1>Page not found...!!!</h1>");
+  res.status(404).sendFile(path.join(rootDir, "views", "page-not-found.html"));
 });
 
 app.listen(8080);
