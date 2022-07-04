@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 
-const adminRoutes = require("./routes/admin");
+const adminData = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const rootDir = require("./utils/path");
 
@@ -10,11 +10,17 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
+// Setting the Template engine as pug
+app.set("view engine", "pug");
+
+// Specifying the "views" as the folder name to find the views for the Template engine
+app.set("views", "views");
+
 // This will helps to parse the incoming response body
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Base route will be "/admin" for all the routes mentioned in the adminRoutes
-app.use("/admin", adminRoutes);
+// Base route will be "/admin" for all the routes mentioned in the adminData
+app.use("/admin", adminData.routes);
 
 // This will executes the shop route
 app.use(shopRoutes);

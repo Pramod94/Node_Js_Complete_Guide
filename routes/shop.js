@@ -1,20 +1,22 @@
 const express = require("express");
-const path = require("path");
 
 // Routes is used to specify the different routes
 const shopRoutes = express.Router();
 
-const rootDir = require("../utils/path");
+const adminData = require("../routes/admin");
 
 shopRoutes.get("/", (req, res, next) => {
   console.log("From the path '/'");
 
-  // If we specify the path like this, it will look for the file in the OS with the below path.
-  // So it doesn't work
-  // res.sendFile("/views/shop.html");
+  console.log("Books---------", adminData.products);
 
-  // Looks for the file in the rootDir
-  res.sendFile(path.join(rootDir, "views", "shop.html"));
+  // render method will look for the Template engine
+  // Then it will look for the file name specific to the template. here shop.pug
+  // We can pass additional data as an object
+  res.render("shop", {
+    prods: adminData.products,
+    docTitle: "Shop Page",
+  });
 });
 
 module.exports = shopRoutes;

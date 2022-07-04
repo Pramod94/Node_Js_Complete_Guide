@@ -7,6 +7,8 @@ const routes = express.Router();
 
 const rootDir = require("../utils/path");
 
+const products = [];
+
 // route will be evaluated to /admin/add-product => GET
 routes.get("/add-product", (req, res, next) => {
   console.log("From the path '/add-product'");
@@ -19,7 +21,12 @@ routes.get("/add-product", (req, res, next) => {
 routes.post("/add-product", (req, res, next) => {
   console.log(req.body);
   fs.writeFileSync("Book", req.body.title);
+
+  // Pushing the data to array and then exporting it, so that it can be accessed in other files
+  products.push({ title: req.body.title });
+
   res.redirect("/");
 });
 
-module.exports = routes;
+exports.routes = routes;
+exports.products = products;
