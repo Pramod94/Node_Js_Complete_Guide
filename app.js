@@ -10,8 +10,8 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
-// Setting the Template engine as pug
-app.set("view engine", "pug");
+// Setting the Template engine as ejs
+app.set("view engine", "ejs");
 
 // Specifying the "views" as the folder name to find the views for the Template engine
 app.set("views", "views");
@@ -29,7 +29,9 @@ app.use(shopRoutes);
 // Since it will look for the default route '/'
 // So this can be used to handle error response for invalid route requests
 app.use((req, res, next) => {
-  res.status(404).sendFile(path.join(rootDir, "views", "page-not-found.html"));
+  res.render("404", {
+    pageTitle: "Page Not Found...!!!",
+  });
 });
 
 app.listen(8080);

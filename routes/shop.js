@@ -11,12 +11,21 @@ shopRoutes.get("/", (req, res, next) => {
   console.log("Books---------", adminData.products);
 
   // render method will look for the Template engine
-  // Then it will look for the file name specific to the template. here shop.pug
+  // Then it will look for the file name specific to the template. here shopEjs.ejs
   // We can pass additional data as an object
-  res.render("shop", {
+  res.render("shopEjs", {
     prods: adminData.products,
-    docTitle: "Shop Page",
+    docTitle: "Shop Page...!!!",
+    description: "No products found...!!! Add product to see the list.",
   });
 });
 
 module.exports = shopRoutes;
+
+/**
+ * EJS - Syntax
+ *
+ * <%= evaluates the content inside %>
+ *
+ * <% we can write javascript syntax inside this %>
+ */
