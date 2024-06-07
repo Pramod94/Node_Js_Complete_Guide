@@ -13,8 +13,13 @@ const products = [];
 routes.get("/add-product", (req, res, next) => {
   console.log("From the path '/add-product'");
 
+  res.render("addProduct.ejs", {
+    pageTitle: "Add Product",
+    btnName: "Add Product",
+  });
+
   // Looks for the file in the rootDir
-  res.sendFile(path.join(rootDir, "views", "add-product.html"));
+  // res.sendFile(path.join(rootDir, "views", "add-product.html"));
 });
 
 // We can have the same route path with different http method. i.e get, post etc

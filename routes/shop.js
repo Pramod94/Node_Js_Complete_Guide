@@ -6,10 +6,6 @@ const shopRoutes = express.Router();
 const adminData = require("../routes/admin");
 
 shopRoutes.get("/", (req, res, next) => {
-  console.log("From the path '/'");
-
-  console.log("Books---------", adminData.products);
-
   // render method will look for the Template engine
   // Then it will look for the file name specific to the template. here shopEjs.ejs
   // We can pass additional data as an object
