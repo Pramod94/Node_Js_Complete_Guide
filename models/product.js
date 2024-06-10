@@ -50,7 +50,12 @@ module.exports = class Product {
   }
 
   // method with static keyword will allow the method to call directly from class without creating its instance
-  static fetchAll() {
-    return products;
+  static fetchAll(cb) {
+    fs.readFile(productFile, (err, fileContent) => {
+      if (err) {
+        return cb([]);
+      }
+      return cb(JSON.parse(fileContent));
+    });
   }
 };

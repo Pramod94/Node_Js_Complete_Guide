@@ -29,12 +29,12 @@ exports.listProducts = (req, res, next) => {
   // We can pass additional data as an object
 
   // Here we store the 'Product' class not its instance
-  const products = Product;
-
-  res.render("shopEjs", {
-    // Accessing the static method of class (which is not of the Product class instance)
-    prods: products.fetchAll(),
-    docTitle: "Shop Page...!!!",
-    description: "No products found...!!! Add product to see the list.",
-  });
+  Product.fetchAll((product) =>
+    res.render("shopEjs", {
+      // Accessing the static method of class (which is not of the Product class instance)
+      prods: product,
+      docTitle: "Shop Page...!!!",
+      description: "No products found...!!! Add product to see the list.",
+    })
+  );
 };
