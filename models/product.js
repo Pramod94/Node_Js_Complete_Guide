@@ -1,61 +1,40 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
-const rootDir = require("../utils/path");
+const p = path.join(
+  path.dirname(process.mainModule.filename),
+  'data',
+  'products.json'
+);
 
-const productFile = path.join(rootDir, "data", "products.json");
-
-const products = [];
+const getProductsFromFile = cb => {
+  fs.readFile(p, (err, fileContent) => {
+    if (err) {
+      cb([]);
+    } else {
+      cb(JSON.parse(fileContent));
+    }
+  });
+};
 
 module.exports = class Product {
-  constructor(title) {
+  constructor(title, imageUrl, description, price) {
     this.title = title;
+    this.imageUrl = imageUrl;
+    this.description = description;
+    this.price = price;
   }
 
   save() {
-    fs.readFile(productFile, (err, fileContent) => {
-      let products = [];
-
-      // If no error while reading the file, parse the existing content and store in products array
-      if (!err) {
-        products = JSON.parse(fileContent);
-      }
-
-      // push the incoming content to the array
+    getProductsFromFile(products => {
       products.push(this);
-
-      // create a new or add content to the existing file
-      fs.writeFile(productFile, JSON.stringify(products), (err) => {
-        console.log("Error writing to file", err);
+      fs.writeFile(p, JSON.stringify(products), err => {
+        console.log(err);
       });
-
-      //   OR - We can also write like below
-
-      //   if (err) {
-      //     console.log("Error while reading a file", err);
-      //     products.push(this);
-      //     fs.writeFile(productFile, JSON.stringify(products), (err) => {
-      //       console.log("Error writing to file", err);
-      //     });
-      //   } else {
-      //     products = JSON.parse(fileContent);
-
-      //     products.push(this);
-
-      //     fs.writeFile(productFile, JSON.stringify(products), (err) => {
-      //       console.log("Error writing to file", err);
-      //     });
-      //   }
     });
   }
 
-  // method with static keyword will allow the method to call directly from class without creating its instance
   static fetchAll(cb) {
-    fs.readFile(productFile, (err, fileContent) => {
-      if (err) {
-        return cb([]);
-      }
-      return cb(JSON.parse(fileContent));
-    });
+    getProductsFromFile(cb);
   }
 };

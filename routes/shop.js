@@ -1,18 +1,19 @@
-const express = require("express");
+const path = require('path');
 
-// Routes is used to specify the different routes
+const express = require('express');
+
+const shopController = require('../controllers/shop');
+
 const router = express.Router();
 
-const productControler = require("../controllers/products");
+router.get('/', shopController.getIndex);
 
-router.get("/", productControler.listProducts);
+router.get('/products', shopController.getProducts);
+
+router.get('/cart', shopController.getCart);
+
+router.get('/orders', shopController.getOrders);
+
+router.get('/checkout', shopController.getCheckout);
 
 module.exports = router;
-
-/**
- * EJS - Syntax
- *
- * <%= evaluates the content inside %>
- *
- * <% we can write javascript syntax inside this %>
- */
