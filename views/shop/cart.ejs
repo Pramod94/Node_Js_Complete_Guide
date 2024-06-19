@@ -5,7 +5,20 @@
         <%- include('../includes/navigation.ejs') %>
         <main>
             <div class="center">
-                    <h1>Cart</h1>
+                    <h1>Cart Items</h1>
+                    <% if (products.length > 0) { %>
+                        <div>
+                            <% for (let prod of products) { %>
+                                <div  class="card__content">
+                                    <div>Title : <%= prod.title %></div>
+                                    <div>Quantity : <%= prod.qty %></div>
+                                    <div>TotalPrice : <%= prod.totalPrice %></div>
+                                </div>
+                                <% } %>
+                        </div>
+                    <% } else { %> 
+                        <div>Add products from Products page to see the cart items...!!!</div>
+                        <% } %>
             </div>
         </main>
         <%- include('../includes/end.ejs') %>

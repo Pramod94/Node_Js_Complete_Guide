@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const Cart = require("../models/cart");
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll((products) => {
@@ -21,17 +22,30 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  res.render("shop/cart", {
-    path: "/cart",
-    pageTitle: "Your Cart",
+  Cart.getAllCartItems((cartItems) => {
+    res.render("shop/cart", {
+      path: "/cart",
+      pageTitle: "Your Cart",
+      products: cartItems,
+    });
   });
 };
 
 exports.postCart = (req, res, next) => {
   console.log("productId", req.body.productId);
-  res.render("shop/cart", {
-    pageTitle: "Your Cart",
-    path: "/cart",
+  const prodId = req.body.productId;
+
+  // Fetched the specific product based on Id and passing it to Cart model method
+  Product.fetchSpecificProduct(prodId, (product) => {
+    console.log("Product", product);
+    Cart.updateCartProduct(product, (cartList) => {
+      console.log("------cartList----", cartList);
+      res.render("shop/cart", {
+        pageTitle: "Your Cart",
+        path: "/cart",
+        products: cartList,
+      });
+    });
   });
 };
 
