@@ -27,6 +27,14 @@ exports.getCart = (req, res, next) => {
   });
 };
 
+exports.postCart = (req, res, next) => {
+  console.log("productId", req.body.productId);
+  res.render("shop/cart", {
+    pageTitle: "Your Cart",
+    path: "/cart",
+  });
+};
+
 exports.getOrders = (req, res, next) => {
   res.render("shop/orders", {
     path: "/orders",
