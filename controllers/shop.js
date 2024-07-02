@@ -2,23 +2,27 @@ const Product = require("../models/product");
 const Cart = require("../models/cart");
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll((products) => {
-    res.render("shop/product-list", {
-      prods: products,
-      pageTitle: "All Products",
-      path: "/products",
-    });
-  });
+  Product.fetchAll()
+    .then(([rows, fieldData]) => {
+      res.render("shop/product-list", {
+        prods: rows,
+        pageTitle: "All Products",
+        path: "/products",
+      });
+    })
+    .catch((err) => console.log("err", err));
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll((products) => {
-    res.render("shop/index", {
-      prods: products,
-      pageTitle: "Shop",
-      path: "/",
-    });
-  });
+  Product.fetchAll()
+    .then(([rows, fieldData]) => {
+      res.render("shop/index", {
+        prods: rows,
+        pageTitle: "Shop",
+        path: "/",
+      });
+    })
+    .catch((err) => console.log("err", err));
 };
 
 exports.getCart = (req, res, next) => {
@@ -67,15 +71,16 @@ exports.getSpecificProduct = (req, res, next) => {
   // in req, params object will have the productId which we used in dynamic routing
   const productId = req.params.productId;
   console.log(productId);
-  Product.fetchSpecificProduct(productId, (foundProduct) => {
-    console.log("---------Product----------", foundProduct);
-
-    // Once we found the proudct with dynamic id, we will be
-    // redirecting to "product-detail" view page with the product info
-    res.render("shop/product-detail", {
-      product: foundProduct,
-      pageTitle: foundProduct.title,
-      path: "/products",
-    });
-  });
+  Product.fetchSpecificProduct(productId)
+    .then(([foundProduct, otherData]) => {
+      console.log("foundProduct", foundProduct);
+      // Once we found the proudct with dynamic id, we will be
+      // redirecting to "product-detail" view page with the product info
+      res.render("shop/product-detail", {
+        product: foundProduct[0],
+        pageTitle: foundProduct[0].title,
+        path: "/products",
+      });
+    })
+    .catch((err) => console.log(err));
 };
