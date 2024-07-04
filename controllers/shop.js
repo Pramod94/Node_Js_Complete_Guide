@@ -2,27 +2,27 @@ const Product = require("../models/product");
 const Cart = require("../models/cart");
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows, fieldData]) => {
+  Product.findAll()
+    .then((products) => {
       res.render("shop/product-list", {
-        prods: rows,
+        prods: products,
         pageTitle: "All Products",
         path: "/products",
       });
     })
-    .catch((err) => console.log("err", err));
+    .catch((err) => console.log("err fetching data from DB", err));
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows, fieldData]) => {
+  Product.findAll()
+    .then((products) => {
       res.render("shop/index", {
-        prods: rows,
+        prods: products,
         pageTitle: "Shop",
         path: "/",
       });
     })
-    .catch((err) => console.log("err", err));
+    .catch((err) => console.log("err fetching data from DB", err));
 };
 
 exports.getCart = (req, res, next) => {
@@ -71,16 +71,31 @@ exports.getSpecificProduct = (req, res, next) => {
   // in req, params object will have the productId which we used in dynamic routing
   const productId = req.params.productId;
   console.log(productId);
-  Product.fetchSpecificProduct(productId)
-    .then(([foundProduct, otherData]) => {
-      console.log("foundProduct", foundProduct);
+
+  // findByPk(id) helps to find the specific product from the table
+  Product.findByPk(productId)
+    .then((product) => {
       // Once we found the proudct with dynamic id, we will be
       // redirecting to "product-detail" view page with the product info
       res.render("shop/product-detail", {
-        product: foundProduct[0],
-        pageTitle: foundProduct[0].title,
+        product: product,
+        pageTitle: product.title,
         path: "/products",
       });
     })
     .catch((err) => console.log(err));
+
+  // ----------OR-----------------
+  // We can find using where clause from all products
+  // Product.findAll({ where: { id: productId } })
+  //   .then((product) => {
+  //     // Once we found the proudct with dynamic id, we will be
+  //     // redirecting to "product-detail" view page with the product info
+  //     res.render("shop/product-detail", {
+  //       product: product[0],
+  //       pageTitle: product[0].title,
+  //       path: "/products",
+  //     });
+  //   })
+  //   .catch((err) => console.log(err));
 };
