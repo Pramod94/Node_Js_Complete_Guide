@@ -1,32 +1,32 @@
-const db = require("../util/database");
+const Sequelize = require("sequelize");
 
-module.exports = class Product {
-  constructor(title, imageUrl, description, price) {
-    this.title = title;
-    this.imageUrl = imageUrl;
-    this.description = description;
-    this.price = price;
-  }
+const sequelize = require("../util/database");
 
-  save() {
-    // inserting values into products table
-    // VALUES(?, ?, ?, ?) means values are dynamically added which we are passing
-    //  in second argument i.e [this.title, this.price, this.description, this.imageUrl]
-    return db.execute(
-      "INSERT INTO products (title, price, description, imageUrl) VALUES(?, ?, ?, ?)",
-      [this.title, this.price, this.description, this.imageUrl]
-    );
-  }
+// Here with the help of sequelize we are defining the table
+// here it is product table with all the columns such as id, title etc
 
-  static fetchAll() {
-    // Here we are extracting all the products from products table which returns a promise
-    return db.execute("SELECT * FROM products");
-  }
+// Note : when we call sync() method on sequelize, it actually collects all the models
+// defined using sequelize.define() and syncs to the DB
+const Product = sequelize.define("product", {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  title: Sequelize.STRING,
+  price: {
+    type: Sequelize.DOUBLE,
+    allowNull: false,
+  },
+  imageUrl: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+});
 
-  // Fetching the specific product with the help of productId
-  static fetchSpecificProduct(productId) {
-    return db.execute("SELECT * FROM products WHERE products.id = ?", [
-      productId,
-    ]);
-  }
-};
+module.exports = Product;

@@ -1,14 +1,12 @@
-const mysql = require("mysql2");
+// sequelize will intern handles the SQL queries
+// so that we can access data from DB with the help of sequelize methods
+// instead of writing plain SQL queries
+const Sequelize = require("sequelize");
 
-// Make use of MySql workbench to create the DB
-
-// creates the pool of connections
-// In here we need to provide the database details to access
-const pool = mysql.createPool({
+// DB name, username and its password
+const sequelize = new Sequelize("node-complete", "root", "PmdM@4444", {
+  dialect: "mysql",
   host: "localhost",
-  user: "root",
-  database: "node-complete",
-  password: "PmdM@4444",
 });
 
-module.exports = pool.promise();
+module.exports = sequelize;

@@ -15,13 +15,19 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  const product = new Product(title, imageUrl, description, price);
-  product
-    .save()
-    .then(() => {
-      res.redirect("/");
-    })
-    .catch((err) => console.log(err));
+
+  console.log("req body", req.body);
+
+  // create method will create and immediately post to DB
+  // where as build method will create and return a new object
+  Product.create({
+    title: title,
+    price: price,
+    imageUrl: imageUrl,
+    description: description,
+  })
+    .then((result) => console.log("Data posted", result))
+    .catch((err) => console.log("Error posting to DB", err));
 };
 
 exports.getProducts = (req, res, next) => {

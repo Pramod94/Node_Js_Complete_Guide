@@ -6,12 +6,7 @@ const bodyParser = require("body-parser");
 const errorController = require("./controllers/error");
 
 // Access the Database which returns the promise
-const db = require("./util/database");
-
-// Executing the SQL query to access the data from DB
-db.execute("SELECT * FROM products")
-  .then((res) => console.log("res----------", res[0]))
-  .catch((err) => console.log("err-----", err));
+const sequelize = require("./util/database");
 
 const app = express();
 
@@ -29,4 +24,12 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-app.listen(3000);
+// This sync() will search for all the models defined with sequelize
+// and creates appropriate table on the DB
+sequelize
+  .sync()
+  .then((result) => {
+    // console.log("result---", result);
+    app.listen(3000);
+  })
+  .catch((err) => console.log(err));
