@@ -11,14 +11,14 @@ router.get("/", shopController.getIndex);
 router.get("/products", shopController.getProducts);
 
 // :productId will catch the dynamically passed Id
-router.get("/products/:productId", shopController.getSpecificProduct);
+// router.get("/products/:productId", shopController.getSpecificProduct);
 
-router.get("/cart", shopController.getCart);
+// router.get("/cart", shopController.getCart);
 
-router.post("/cart", shopController.postCart);
+// router.post("/cart", shopController.postCart);
 
-router.get("/orders", shopController.getOrders);
+// router.get("/orders", shopController.getOrders);
 
-router.get("/checkout", shopController.getCheckout);
+// router.get("/checkout", shopController.getCheckout);
 
 module.exports = router;
