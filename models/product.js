@@ -1,3 +1,4 @@
+const mongoDb = require("mongodb");
 const getDb = require("../util/database_mongodb").getDb;
 
 class Product {
@@ -32,6 +33,24 @@ class Product {
         return res;
       })
       .catch((err) => console.log(err));
+  }
+
+  static findOne(prodId) {
+    const db = getDb();
+    return (
+      db
+        .collection("products")
+        // mongodb adds dynamic id with _id
+        // since _id is stored in some mongodb specific ObjectId format, we need to convert our
+        // string id into its format
+        .find({ _id: new mongoDb.ObjectId(prodId) })
+        .next()
+        .then((res) => {
+          console.log("Found product", res);
+          return res;
+        })
+        .catch((err) => console.log(err))
+    );
   }
 }
 

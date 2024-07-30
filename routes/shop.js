@@ -11,7 +11,7 @@ router.get("/", shopController.getIndex);
 router.get("/products", shopController.getProducts);
 
 // :productId will catch the dynamically passed Id
-// router.get("/products/:productId", shopController.getSpecificProduct);
+router.get("/products/:productId", shopController.getSpecificProduct);
 
 // router.get("/cart", shopController.getCart);
 

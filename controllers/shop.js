@@ -72,8 +72,7 @@ exports.getSpecificProduct = (req, res, next) => {
   const productId = req.params.productId;
   console.log(productId);
 
-  // findByPk(id) helps to find the specific product from the table
-  Product.findByPk(productId)
+  Product.findOne(productId)
     .then((product) => {
       // Once we found the proudct with dynamic id, we will be
       // redirecting to "product-detail" view page with the product info
@@ -84,6 +83,19 @@ exports.getSpecificProduct = (req, res, next) => {
       });
     })
     .catch((err) => console.log(err));
+
+  // findByPk(id) helps to find the specific product from the table
+  // Product.findByPk(productId)
+  //   .then((product) => {
+  //     // Once we found the proudct with dynamic id, we will be
+  //     // redirecting to "product-detail" view page with the product info
+  //     res.render("shop/product-detail", {
+  //       product: product,
+  //       pageTitle: product.title,
+  //       path: "/products",
+  //     });
+  //   })
+  //   .catch((err) => console.log(err));
 
   // ----------OR-----------------
   // We can find using where clause from all products
