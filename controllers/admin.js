@@ -1,5 +1,4 @@
 const Product = require("../models/product");
-
 exports.getAddProduct = (req, res, next) => {
   res.render("admin/add-product", {
     pageTitle: "Add Product",
@@ -27,20 +26,6 @@ exports.postAddProduct = (req, res, next) => {
       res.redirect("/admin/products");
     })
     .catch((err) => console.log("Error posting to DB", err));
-
-  // create method will create and immediately post to DB
-  // where as build method will create and return a new object
-  // Product.create({
-  //   title: title,
-  //   price: price,
-  //   imageUrl: imageUrl,
-  //   description: description,
-  // })
-  //   .then((result) => {
-  //     console.log("Data posted", result);
-  //     res.redirect("/admin/products");
-  //   })
-  //   .catch((err) => console.log("Error posting to DB", err));
 };
 
 exports.getProducts = (req, res, next) => {
@@ -92,15 +77,10 @@ exports.postEditProduct = (req, res, next) => {
   const price = req.body.price;
   const desc = req.body.description;
 
-  Product.findOne(prodId)
-    .then((product) => {
-      product.title = title;
-      product.imageUrl = imageUrl;
-      product.price = price;
-      product.description = desc;
-      // save() method saves the product to the db and returns the promise
-      return product.save();
-    })
+  const product = new Product(title, imageUrl, price, desc, prodId);
+
+  product
+    .save()
     .then(() => {
       console.log("Product Saved to DB..!!!");
       res.redirect("/admin/products");
@@ -108,15 +88,13 @@ exports.postEditProduct = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
-// exports.deleteProduct = (req, res, next) => {
-//   const prodId = req.body.productId;
-//   Product.findByPk(prodId)
-//     .then((product) => {
-//       return product.destroy();
-//     })
-//     .then(() => {
-//       console.log("Product deleted");
-//       res.redirect("/admin/products");
-//     })
-//     .catch((err) => console.log("error deleting", err));
-// };
+exports.deleteProduct = (req, res, next) => {
+  const prodId = req.body.productId;
+
+  Product.delete(prodId)
+    .then(() => {
+      console.log("Product deleted");
+      res.redirect("/admin/products");
+    })
+    .catch((err) => console.log("error deleting", err));
+};
