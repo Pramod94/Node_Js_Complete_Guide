@@ -1,11 +1,10 @@
+const mongoose = require("mongoose");
 const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
 
 const errorController = require("./controllers/error");
-
-const mongoConnect = require("./util/database_mongodb").mongoConnect;
 
 // Access the Database which returns the promise
 // const sequelize = require("./util/database");
@@ -26,16 +25,12 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-// This sync() will search for all the models defined with sequelize
-// and creates appropriate table on the DB
-// sequelize
-//   .sync()
-//   .then((result) => {
-//     // console.log("result---", result);
-//     app.listen(3000);
-//   })
-//   .catch((err) => console.log(err));
-
-mongoConnect(() => {
-  app.listen(3000);
-});
+mongoose
+  .connect(
+    "mongodb+srv://pramodmithyantha:Mx0SUYUt5f9sZEcE@cluster0.dk4h42f.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0"
+  )
+  .then(() => {
+    console.log("Connected to MongoDB...!!!");
+    app.listen(3000);
+  })
+  .catch((err) => console.log(err));

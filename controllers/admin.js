@@ -17,8 +17,14 @@ exports.postAddProduct = (req, res, next) => {
 
   console.log("req body", req.body);
 
-  const product = new Product(title, imageUrl, price, description);
+  const product = new Product({
+    title: title,
+    imageUrl: imageUrl,
+    price: price,
+    description: description,
+  });
 
+  // save() comes as part of mongoose which helps to save data to db
   product
     .save()
     .then(() => {
@@ -29,7 +35,8 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
+  // find() method from mongoose will fetch all the products
+  Product.find()
     .then((products) => {
       res.render("admin/products", {
         prods: products,
@@ -55,8 +62,8 @@ exports.getEditProduct = (req, res, next) => {
 
   console.log("prodId", prodId);
 
-  // findByPk method is used to find data by using specific id
-  Product.findOne(prodId).then((product) => {
+  // findById from mongoose will find the product with specific id
+  Product.findById(prodId).then((product) => {
     console.log("product", product);
     if (!product) {
       return res.redirect("/");
@@ -77,10 +84,15 @@ exports.postEditProduct = (req, res, next) => {
   const price = req.body.price;
   const desc = req.body.description;
 
-  const product = new Product(title, imageUrl, price, desc, prodId);
-
-  product
-    .save()
+  Product.findById(prodId)
+    .then((product) => {
+      product.title = title;
+      product.imageUrl = imageUrl;
+      product.price = price;
+      product.description = desc;
+      // save() from mongoose will save the product to db
+      return product.save();
+    })
     .then(() => {
       console.log("Product Saved to DB..!!!");
       res.redirect("/admin/products");
@@ -91,7 +103,8 @@ exports.postEditProduct = (req, res, next) => {
 exports.deleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
 
-  Product.delete(prodId)
+  // findByIdAndDelete(id) will find and remove the product from db
+  Product.findByIdAndDelete(prodId)
     .then(() => {
       console.log("Product deleted");
       res.redirect("/admin/products");

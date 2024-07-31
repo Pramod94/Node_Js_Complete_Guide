@@ -2,7 +2,7 @@ const Product = require("../models/product");
 const Cart = require("../models/cart");
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
     .then((products) => {
       res.render("shop/product-list", {
         prods: products,
@@ -14,7 +14,7 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
     .then((products) => {
       res.render("shop/index", {
         prods: products,
@@ -72,7 +72,9 @@ exports.getSpecificProduct = (req, res, next) => {
   const productId = req.params.productId;
   console.log(productId);
 
-  Product.findOne(productId)
+  // findById method wil find the speicific product which matches the id
+  // In here no need to convert the id to object id, mongoose will handle this automatically
+  Product.findById(productId)
     .then((product) => {
       // Once we found the proudct with dynamic id, we will be
       // redirecting to "product-detail" view page with the product info
@@ -83,31 +85,4 @@ exports.getSpecificProduct = (req, res, next) => {
       });
     })
     .catch((err) => console.log(err));
-
-  // findByPk(id) helps to find the specific product from the table
-  // Product.findByPk(productId)
-  //   .then((product) => {
-  //     // Once we found the proudct with dynamic id, we will be
-  //     // redirecting to "product-detail" view page with the product info
-  //     res.render("shop/product-detail", {
-  //       product: product,
-  //       pageTitle: product.title,
-  //       path: "/products",
-  //     });
-  //   })
-  //   .catch((err) => console.log(err));
-
-  // ----------OR-----------------
-  // We can find using where clause from all products
-  // Product.findAll({ where: { id: productId } })
-  //   .then((product) => {
-  //     // Once we found the proudct with dynamic id, we will be
-  //     // redirecting to "product-detail" view page with the product info
-  //     res.render("shop/product-detail", {
-  //       product: product[0],
-  //       pageTitle: product[0].title,
-  //       path: "/products",
-  //     });
-  //   })
-  //   .catch((err) => console.log(err));
 };
