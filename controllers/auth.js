@@ -15,5 +15,11 @@ exports.postLogin = (req, res, next) => {
   // IMP - This cookie will be attached to the every request sent by the browser. This can be checked in
   // the request header of all the incoming request i.e all API from the browser to the server
   res.setHeader("Set-Cookie", "isLoggedIn=true");
+
+  // Session will be stored on the server
+  // This will set a session, we can check on Application -> Cookie -> connect.sid
+  // In here session will be stored on the memory, Ideally we should store it on the DB
+  req.session.loggedIn = true;
+
   res.redirect("/");
 };

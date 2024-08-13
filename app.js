@@ -6,6 +6,8 @@ const bodyParser = require("body-parser");
 
 const errorController = require("./controllers/error");
 
+const session = require("express-session");
+
 // Access the Database which returns the promise
 // const sequelize = require("./util/database");
 
@@ -20,6 +22,12 @@ const authRoutes = require("./routes/auth");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
+
+// secret - should be a long string value
+// resave - session won't be saved for every request and response, it will be saved only when it is changed
+app.use(
+  session({ secret: "my secret", resave: false, saveUninitialized: false })
+);
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
