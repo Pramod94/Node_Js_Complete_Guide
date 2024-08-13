@@ -1,5 +1,8 @@
 // Note : Cookies are stored on the Client side and Sessions are stored on the server side
 
+const bcrypt = require("bcryptjs");
+const User = require("../models/user");
+
 exports.getLogin = (req, res, next) => {
   // This way we can access the Cookie sent by all API's
   console.log("Cookie", req.get("Cookie"));
@@ -32,7 +35,37 @@ exports.postLogin = (req, res, next) => {
   res.redirect("/");
 };
 
-exports.postSignup = (req, res, next) => {};
+exports.postSignup = (req, res, next) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
+  // checking whether the user exists with the provided email or not
+  User.findOne({ email: email })
+    .then((userDoc) => {
+      // if user exists we are redirecting the user to login page
+      if (userDoc) {
+        return res.redirect("/signup");
+      }
+
+      // bcrypt.hash() will generate the hashed password. So that no one can decrypt it back.
+      return bcrypt
+        .hash(password, 12)
+        .then((hashedPassword) => {
+          const user = new User({
+            email: email,
+            // Here we are storing the hashed password on the db
+            password: hashedPassword,
+            cart: { items: [] },
+          });
+          // this returns the promise, so we can chain one more then after this then
+          return user.save();
+        })
+        .then(() => {
+          res.redirect("/login");
+        });
+    })
+    .catch((err) => console.log(err));
+};
 
 exports.postLogout = (req, res, next) => {
   // destory() will delete the session created
