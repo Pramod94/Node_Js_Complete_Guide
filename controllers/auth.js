@@ -23,3 +23,12 @@ exports.postLogin = (req, res, next) => {
 
   res.redirect("/");
 };
+
+exports.getLogout = (req, res, next) => {
+  // destory() will delete the session created
+  req.session.destroy((err) => {
+    console.log("Session destroyed...!!!");
+    console.log(err);
+    res.redirect("/");
+  });
+};
