@@ -10,6 +10,14 @@ exports.getLogin = (req, res, next) => {
   });
 };
 
+exports.getSignup = (req, res, next) => {
+  res.render("auth/signup", {
+    path: "/signup",
+    pageTitle: "Signup",
+    isAuthenticated: false,
+  });
+};
+
 exports.postLogin = (req, res, next) => {
   // This will set the cookie "isLoggedIn=true", which can be tested in the browser (Application -> Cookie)
   // IMP - This cookie will be attached to the every request sent by the browser. This can be checked in
@@ -24,7 +32,9 @@ exports.postLogin = (req, res, next) => {
   res.redirect("/");
 };
 
-exports.getLogout = (req, res, next) => {
+exports.postSignup = (req, res, next) => {};
+
+exports.postLogout = (req, res, next) => {
   // destory() will delete the session created
   req.session.destroy((err) => {
     console.log("Session destroyed...!!!");
