@@ -22,17 +22,33 @@ exports.getSignup = (req, res, next) => {
 };
 
 exports.postLogin = (req, res, next) => {
-  // This will set the cookie "isLoggedIn=true", which can be tested in the browser (Application -> Cookie)
-  // IMP - This cookie will be attached to the every request sent by the browser. This can be checked in
-  // the request header of all the incoming request i.e all API from the browser to the server
-  res.setHeader("Set-Cookie", "isLoggedIn=true");
+  const email = req.body.email;
+  const password = req.body.password;
 
-  // Session will be stored on the server
-  // This will set a session, we can check on Application -> Cookie -> connect.sid
-  // In here session will be stored on the memory, Ideally we should store it on the DB
-  req.session.loggedIn = true;
-
-  res.redirect("/");
+  // Finding the user by email id
+  User.findOne({ email: email }).then((userData) => {
+    // if not found redirect to login page
+    if (!userData) {
+      return res.redirect("/login");
+    }
+    // If user exists compare the user entered password with the stored password
+    bcrypt
+      .compare(password, userData.password)
+      .then((doMatch) => {
+        // if password match then create a session and save it and redirect to home page
+        if (doMatch) {
+          console.log("Login cred matched...!!!");
+          req.session.isLoggedIn = true;
+          req.session.user = userData;
+          return req.session.save(() => {
+            return res.redirect("/");
+          });
+        }
+        // if password didn't match then redirect to login page
+        return res.redirect("/login");
+      })
+      .catch((err) => console.log(err));
+  });
 };
 
 exports.postSignup = (req, res, next) => {
